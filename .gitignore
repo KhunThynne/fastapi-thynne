@@ -9,7 +9,7 @@ settings.json
 venv/
 .env
 .env.*
-
+!.env.example
 # VSCode
 .vscode/
 *.code-workspace
