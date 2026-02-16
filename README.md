@@ -1,42 +1,102 @@
 # FastApi-Thynne 🚀
 
-FastAPI backend project for Thynne.
-API + GraphQL + Service ต่าง ๆ
+FastAPI backend project for Thynne, incorporating API, GraphQL, and various services.
 
-## pip install -r requirements.txt
+## 📦 Features
 
-## 📦 Requirements
+- **FastAPI**: Modern, fast (high-performance) web framework for building APIs with Python 3.12+.
+- **GraphQL**: Integrated using Strawberry to provide a flexible and efficient alternative to REST.
+- **Async**: Fully asynchronous support for high concurrency.
+- **Type Safety**: Utilizes Python type hints for better code quality and developer experience.
+
+## 🛠️ Requirements
 
 - [Python 3.12+](https://www.python.org/downloads/)
-- [Poetry](https://python-poetry.org/docs/#installation)
-- [uvicorn]
+- [Virtualenv](https://docs.python.org/3/library/venv.html) or [Poetry](https://python-poetry.org/)
 
----
+## 🚀 Getting Started
 
-# Running the server
+### 1. Clone the repository
 
-`cd [root_this_project_name]`
+```bash
+git clone https://github.com/KhunThynne/FastApi-Thynne.git
+cd FastApi-Thynne
+```
 
-`python -m venv venv`
+### 2. Set up a virtual environment
 
-source venv/Scripts/activate (git branch) || venv\Scripts\activate.bat(cmd)
+```bash
+# Create a virtual environment
+python -m venv venv
 
-`pip install -r requirements.txt`
-`python -m src.app.main`
+# Activate the virtual environment
+# Windows (Command Prompt)
+venv\Scripts\activate.bat
+# Windows (PowerShell)
+venv\Scripts\Activate.ps1
+# Mac/Linux
+source venv/bin/activate
+```
 
-# FastApi
+### 3. Install dependencies
 
-./run.bat
+```bash
+pip install -r requirements.txt
+```
 
-## Git branch for current develop-thynne
+### 4. Run the application
 
-fastapi https://github.com/KhunThynne/FastApi-Thynne.git (fetch)
-fastapi https://github.com/KhunThynne/FastApi-Thynne.git (push)
+You can use the provided batch script or run it manually.
 
-<!-- Git bash -->
+**Using the batch script (Windows):**
+bump-my-version bump minor --commit --tag
 
-./run.bat
-
-<!-- CMD -->
-
+```cmd
 run.bat
+```
+
+**Manually:**
+
+```bash
+./run.bat
+# Ensure your PYTHONPATH includes the src directory
+set PYTHONPATH=%CD%\src  # Windows
+export PYTHONPATH=$PWD/src # Mac/Linux
+
+# Run the Uvicorn server
+python -m src.app.main
+```
+
+The server will start at `http://127.0.0.1:8000`.
+
+## 📚 Documentation
+
+- **Swagger UI**: Visit `http://127.0.0.1:8000/docs` for the interactive API documentation.
+- **ReDoc**: Visit `http://127.0.0.1:8000/redoc` for an alternative API documentation view.
+- **GraphQL Playground**: Visit `http://127.0.0.1:8000/graphql` to explore and query the GraphQL API.
+
+## 🧪 GraphQL Examples
+
+### Query: Get All Users
+
+```graphql
+query {
+  getUsers {
+    id
+    username
+    email
+  }
+}
+```
+
+### Mutation: Create User
+
+```graphql
+mutation {
+  createUser(username: "newuser", email: "new@example.com") {
+    id
+    username
+    email
+  }
+}
+```
