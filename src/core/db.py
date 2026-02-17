@@ -1,9 +1,10 @@
 from collections.abc import AsyncIterator
 
-from env import _env
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
+
+from env import _env
 
 ASYNC_DATABASE_URL = _env.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
