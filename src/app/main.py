@@ -4,10 +4,11 @@ from contextlib import asynccontextmanager
 import uvicorn
 
 from api import api_router
-from app.api.graphql import graphql_app
 from env import _env
 from fastapi import FastAPI
 from typeguard import typechecked
+
+from app.api.graphql import graphql_app
 
 
 @asynccontextmanager

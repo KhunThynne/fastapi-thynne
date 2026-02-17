@@ -1,6 +1,6 @@
 import strawberry
 
-from app.api.graphql.users.types import UserType
+from app.models.user_schema import UserType
 
 
 @strawberry.type

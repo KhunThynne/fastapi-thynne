@@ -1,8 +1,9 @@
 import strawberry
 
+from strawberry.fastapi import GraphQLRouter
+
 from app.api.graphql.users.mutations import UserMutation
 from app.api.graphql.users.queries import UserQuery
-from strawberry.fastapi import GraphQLRouter
 
 
 @strawberry.type
