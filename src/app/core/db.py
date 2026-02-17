@@ -1,7 +1,9 @@
 from collections.abc import AsyncIterator
 
-from sqlalchemy.ext.asyncio import create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import (
+    async_sessionmaker,
+    create_async_engine,
+)  # เพิ่ม async_sessionmaker
 from sqlmodel import SQLModel
 from sqlmodel.ext.asyncio.session import AsyncSession
 
@@ -9,7 +11,12 @@ from app.env import _env
 
 ASYNC_DATABASE_URL = _env.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
 
+
 engine = create_async_engine(ASYNC_DATABASE_URL, echo=_env.DEBUG, future=True)
+
+async_session_maker = async_sessionmaker(
+    engine, class_=AsyncSession, expire_on_commit=False
+)
 
 
 async def init_db() -> None:
@@ -18,6 +25,5 @@ async def init_db() -> None:
 
 
 async def get_session() -> AsyncIterator[AsyncSession]:
-    async_session = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
-    async with async_session() as session:
+    async with async_session_maker() as session:
         yield session

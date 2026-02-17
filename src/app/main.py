@@ -26,7 +26,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     print("FastAPI is shutting down...")
 
 
-app = FastAPI(title="Thynne FastAPI")
+app = FastAPI(title=_env.APP_NAME, lifespan=lifespan)
 
 app.include_router(api_router)
 app.include_router(graphql_app, prefix="/graphql")
