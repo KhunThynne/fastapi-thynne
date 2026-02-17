@@ -1,5 +1,5 @@
 # FastApi-Thynne 🚀
-Version: 0.1.2
+Version: 0.1.1
 FastAPI backend project for Thynne, incorporating API, GraphQL, and various services.
 
 ## 📦 Features

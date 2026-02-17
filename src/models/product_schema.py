@@ -1,4 +1,5 @@
 import enum
+import uuid
 
 from dataclasses import dataclass
 from uuid import UUID
@@ -23,7 +24,9 @@ class ProductBase:
 
 class ProductTable(ProductBase, SQLModel, table=True):
     __tablename__ = "products"
-    id: UUID | None = Field(default=None, primary_key=True)
+    id: UUID = Field(
+        default_factory=uuid.uuid4, primary_key=True, index=True, nullable=False
+    )
     name: str = Field(index=True)
 
 
