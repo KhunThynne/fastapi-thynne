@@ -1,5 +1,5 @@
 # FastApi-Thynne 🚀
-
+Version: 0.1.0
 FastAPI backend project for Thynne, incorporating API, GraphQL, and various services.
 
 ## 📦 Features
@@ -45,12 +45,13 @@ pip install -r requirements.txt
 ```
 
 ### 4. Run the application
-
+create .env and add DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres" <- your database url
 You can use the provided batch script or run it manually.
 
 **Using the batch script (Windows):**
+bump-my-version bump major --commit --tag
 bump-my-version bump minor --commit --tag
-
+bump-my-version bump patch --commit --tag
 ```cmd
 run.bat
 ```
@@ -64,7 +65,7 @@ set PYTHONPATH=%CD%\src  # Windows
 export PYTHONPATH=$PWD/src # Mac/Linux
 
 # Run the Uvicorn server
-python -m src.app.main
+python -m src.main
 ```
 
 The server will start at `http://127.0.0.1:8000`.

@@ -9,7 +9,4 @@ replace = "{new_version}"
 filename = "pyproject.toml"
 
 [[tool.bumpversion.files]]
-filename = "src/app/__init__.py"
-
-[[tool.bumpversion.files]]
 filename = "README.md"

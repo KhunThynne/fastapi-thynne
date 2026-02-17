@@ -3,19 +3,18 @@ from contextlib import asynccontextmanager
 
 import uvicorn
 
-from fastapi import FastAPI
-from typeguard import typechecked
-
 from app.api import api_router
 from app.api.graphql import graphql_app
-from app.env import _env
+from env import _env
+from fastapi import FastAPI
+from typeguard import typechecked
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     print("FastAPI is starting up...")
     try:
-        from app.core.db import init_db
+        from core.db import init_db
 
         await init_db()
         print("Database connected and tables created successfully.")
@@ -40,7 +39,7 @@ def root() -> dict[str, str]:
 
 if __name__ == "__main__":
     uvicorn.run(
-        "app.main:app",
+        "main:app",
         host=_env.HOST,
         port=_env.PORT,
         reload=_env.DEBUG,
