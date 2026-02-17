@@ -40,7 +40,7 @@ def root() -> dict[str, str]:
 
 if __name__ == "__main__":
     uvicorn.run(
-        "app.main:app",
+        "main:app",
         host=_env.HOST,
         port=_env.PORT,
         reload=_env.DEBUG,

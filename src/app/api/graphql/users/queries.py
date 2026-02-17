@@ -1,5 +1,6 @@
 import strawberry
 
+from models.user_schema import UserTable, UserType  # Import UserTable มาใช้ Query
 from sqlalchemy.sql.selectable import Select
 from sqlmodel import select
 

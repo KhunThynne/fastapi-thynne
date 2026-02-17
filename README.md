@@ -1,5 +1,5 @@
 # FastApi-Thynne 🚀
-
+Version: 0.1.1
 FastAPI backend project for Thynne, incorporating API, GraphQL, and various services.
 
 ## 📦 Features
@@ -19,7 +19,7 @@ FastAPI backend project for Thynne, incorporating API, GraphQL, and various serv
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/KhunThynne/FastApi-Thynne.git
+git clone https://github.com/KhunThynne/fastapi-thynne.git
 cd FastApi-Thynne
 ```
 
@@ -45,12 +45,13 @@ pip install -r requirements.txt
 ```
 
 ### 4. Run the application
-
+create .env and add DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres" <- your database url
 You can use the provided batch script or run it manually.
 
 **Using the batch script (Windows):**
+bump-my-version bump major --commit --tag
 bump-my-version bump minor --commit --tag
-
+bump-my-version bump patch --commit --tag
 ```cmd
 run.bat
 ```

@@ -14,7 +14,7 @@ class UserBase:
     email: str
 
 
-class UserTable(UserBase, SQLModel, table=True):
+class UserTable(UserBase, SQLModel, table=True):  # type: ignore
     id: UUID = Field(
         default_factory=uuid.uuid4, primary_key=True, index=True, nullable=False
     )
