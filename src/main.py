@@ -7,7 +7,6 @@ from fastapi import FastAPI
 from typeguard import typechecked
 
 from app.api import api_router
-from app.api.graphql import graphql_app
 from env import _env
 
 
@@ -29,7 +28,6 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 app = FastAPI(title=_env.APP_NAME, lifespan=lifespan)
 
 app.include_router(api_router)
-app.include_router(graphql_app, prefix="/graphql")
 
 
 @app.get("/")
