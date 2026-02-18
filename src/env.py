@@ -13,7 +13,8 @@ class Env(BaseSettings):
     HOST: str = "127.0.0.1"
     PORT: int = 8000
     DATABASE_URL: str = Field(default="")
-    GRAPHQL_ACCESS_TOKEN: str = Field(default="development_token")
+    GRAPHQL_ACCESS_TOKEN: str | None = Field(default=None)
+    APP_ENV: str = Field(default="development")
 
     class Config:
         pass
