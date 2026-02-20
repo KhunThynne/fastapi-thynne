@@ -8,6 +8,8 @@ from .shared import StrawberryPydanticBase
 ProductsTypeEnum = strawberry.enum(productstypeenum)
 
 
-@strawberry.experimental.pydantic.type(model=products, all_fields=True)
+@strawberry.experimental.pydantic.type(
+    model=products, fields=["id", "name", "type", "duration_days"]
+)
 class ProductsType(StrawberryPydanticBase):
     pass

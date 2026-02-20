@@ -1,7 +1,7 @@
 import strawberry
 
 from core.db import prisma
-from models.products_schema import ProductsType
+from models.gql_types import ProductsType
 
 
 @strawberry.type

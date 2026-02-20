@@ -3,7 +3,7 @@ import uuid
 import strawberry
 
 from core.db import prisma
-from models.products_schema import ProductsType, ProductsTypeEnum
+from models.gql_types import ProductsType, ProductsTypeEnum
 
 
 @strawberry.type

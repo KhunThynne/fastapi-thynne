@@ -3,7 +3,7 @@ from uuid import UUID
 import strawberry
 
 from core.db import prisma
-from models.licenses_schema import LicensesType
+from models.gql_types import LicensesType
 
 
 @strawberry.type
