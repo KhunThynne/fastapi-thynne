@@ -1,14 +1,12 @@
+import uuid
+
 from datetime import UTC, datetime
 from uuid import UUID
 
 import strawberry
 
-from sqlalchemy.sql.selectable import Select
-from sqlmodel import select
-
-from core.db import async_session_maker
-from models.licenses_schema import LicensesTable, LicensesType
-from repository.licenses_repo import LicensesRepository
+from core.db import prisma
+from models.licenses_schema import LicensesType
 from utils.license import generate_product_key
 
 
@@ -20,38 +18,22 @@ class LicenseMutation:
         product_id: UUID,
         key: str | None = None,
     ) -> LicensesType:
-        async with async_session_maker() as session:
-            final_key = key if key else generate_product_key()
+        final_key = key if key else generate_product_key()
+        new_id = str(uuid.uuid4())
 
-            new_license = LicensesTable(key=final_key, product_id=product_id)
-
-            repo = LicensesRepository(session)
-            await repo.add(new_license)
-            return LicensesType.from_pydantic(new_license)
+        new_license = await prisma.licenses.create(
+            data={"id": new_id, "key": final_key, "product_id": str(product_id)}
+        )
+        return LicensesType.from_pydantic(new_license)
 
     @strawberry.mutation
     async def delete_license(self, id: UUID) -> bool:
-        async with async_session_maker() as session:
-            repo = LicensesRepository(session)
-            license_obj = await repo.get_by_id(id)
-
-            if license_obj:
-                return await repo.delete(license_obj)
-
-            return False
+        deleted = await prisma.licenses.delete_many(where={"id": str(id)})
+        return deleted > 0
 
     @strawberry.mutation
     async def revoke_license(self, key: str) -> bool:
-        async with async_session_maker() as session:
-            statement: Select = select(LicensesTable).where(LicensesTable.key == key)
-            result = await session.execute(statement)
-            license_obj = result.scalars().first()
-
-            if license_obj:
-                license_obj.expired_at = datetime.now(UTC)
-
-                session.add(license_obj)
-                await session.commit()
-                return True
-
-            return False
+        updated = await prisma.licenses.update_many(
+            where={"key": key}, data={"expired_at": datetime.now(UTC)}
+        )
+        return updated > 0

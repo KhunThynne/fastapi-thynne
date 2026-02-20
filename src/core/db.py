@@ -1,29 +1,15 @@
-from collections.abc import AsyncIterator
+from prisma import Prisma
 
-from sqlalchemy.ext.asyncio import (  # type: ignore
-    async_sessionmaker,
-    create_async_engine,
-)
-from sqlmodel import SQLModel
-from sqlmodel.ext.asyncio.session import AsyncSession
-
-from env import _env
-
-ASYNC_DATABASE_URL = _env.DATABASE_URL.replace("postgresql://", "postgresql+asyncpg://")
-
-
-engine = create_async_engine(ASYNC_DATABASE_URL, echo=_env.DEBUG, future=True)
-
-async_session_maker = async_sessionmaker(
-    engine, class_=AsyncSession, expire_on_commit=False
-)
+prisma = Prisma(auto_register=True)
 
 
 async def init_db() -> None:
-    async with engine.begin() as conn:
-        await conn.run_sync(SQLModel.metadata.create_all)
+    """Initialize database connection"""
+    if not prisma.is_connected():
+        await prisma.connect()
 
 
-async def get_session() -> AsyncIterator[AsyncSession]:
-    async with async_session_maker() as session:
-        yield session
+async def close_db() -> None:
+    """Close database connection"""
+    if prisma.is_connected():
+        await prisma.disconnect()

@@ -24,6 +24,13 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
 
     yield
     print("FastAPI is shutting down...")
+    try:
+        from core.db import close_db
+
+        await close_db()
+        print("Database connection closed successfully.")
+    except Exception as e:
+        print(f"⚠️ Warning: Error while disconnecting database: {e}")
 
 
 app = FastAPI(title=_env.APP_NAME, lifespan=lifespan)

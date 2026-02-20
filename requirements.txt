@@ -2,13 +2,11 @@ fastapi
 uvicorn[standard]==0.23.2
 pydantic
 discord.py
-sqlmodel>=0.0.22
-sqlalchemy>=2.0.0
+prisma
+discord.py
 python-dotenv==1.0.1
 psycopg2-binary==2.9.9
 types-requests
-asyncpg
-alembic
 # GraphQL (Added)
 strawberry-graphql[fastapi]
 omise
