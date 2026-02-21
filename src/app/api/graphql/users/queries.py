@@ -3,14 +3,14 @@ from uuid import UUID
 import strawberry
 
 from core.db import prisma
-from models.gql_types import UsersType
+from models.user import UsersType
 
 
 @strawberry.type
 class UsersQuery:
     @strawberry.field
     async def get_users(self, info: strawberry.Info) -> list[UsersType]:
-        users_db = await prisma.users.find_many(take=100)
+        users_db = await prisma.user.find_many(take=100)
         return [UsersType.from_pydantic(u) for u in users_db]
 
     @strawberry.field
@@ -19,9 +19,9 @@ class UsersQuery:
     ) -> UsersType | None:
         user = None
         if id is not None:
-            user = await prisma.users.find_unique(where={"id": str(id)})
+            user = await prisma.user.find_unique(where={"id": str(id)})
         elif username is not None:
-            user = await prisma.users.find_unique(where={"username": username})
+            user = await prisma.user.find_unique(where={"username": username})
 
         if user:
             return UsersType.from_pydantic(user)

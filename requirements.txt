@@ -1,6 +1,7 @@
 fastapi
 uvicorn[standard]==0.23.2
 pydantic
+pydantic_settings
 discord.py
 prisma
 discord.py

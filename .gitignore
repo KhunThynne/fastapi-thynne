@@ -37,3 +37,5 @@ htmlcov/
 *.mypy_cache/
 .pytest_cache/
 .ruff_cache/
+
+/src/generated/prisma

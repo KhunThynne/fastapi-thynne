@@ -43,7 +43,7 @@ source venv/bin/activate
 ```bash
 pip install -r requirements.txt
 ```
-
+source venv/Scripts/activate
 ### 4. Run the application
 create .env and add DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres" <- your database url
 You can use the provided batch script or run it manually.
