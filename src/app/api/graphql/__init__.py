@@ -2,6 +2,8 @@ import strawberry
 
 from strawberry.fastapi import GraphQLRouter
 
+# Accounts
+from app.api.graphql.accounts.queries import AccountsQuery
 from app.api.graphql.security import get_context
 
 # Users
@@ -10,7 +12,7 @@ from app.api.graphql.users.queries import UsersQuery
 
 
 @strawberry.type
-class Query(UsersQuery):
+class Query(UsersQuery, AccountsQuery):
     pass
 
 
