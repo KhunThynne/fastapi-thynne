@@ -1,39 +1,111 @@
-from typing import Any  # noqa: UP035
+from typing import Any, Self, Literal  # noqa: I001, UP035
 from uuid import UUID
-
+from enum import Enum
 import strawberry
+import sys
 
 
-def strawberry_crud(gql_type: type[Any], repo: Any, prefix: str = ""):  # noqa: ANN201, ANN401
-    """
-    Decorator สำหรับฉีด CRUD methods เข้าไปใน class อัตโนมัติ
-    prefix: ใช้สำหรับกรณีอยากได้ชื่อฟังก์ชันแบบ get_admin_users (ถ้าต้องการ)
-    """
+class GqlMode(Enum):
+    QUERY = "query"
+    MUTATION = "mutation"
 
+
+CRUDMode = Literal["query", "mutation"]
+
+
+def strawberry_crud(  # noqa: ANN201
+    mode: CRUDMode,
+    gql_type: type[Any],
+    repo: Any,  # noqa: ANN401
+    input_fields: type[Any] | None = None,
+    prefix: str = "",
+):  # noqa: ANN201, ANN401
     def wrapper(cls):  # noqa: ANN001, ANN202
-        model_name = gql_type.__name__.replace("Type", "").lower()
+        name = prefix if prefix else gql_type.__name__.replace("Type", "").lower()
+        # auto_input_type = None
+        # if input_fields and mode == "mutation":
+        #     auto_input_type = create_dynamic_input(name, input_fields)
+        current_module = sys.modules[cls.__module__]
 
-        # 1. Dynamic Method: Get All
-        async def get_all(self, info: strawberry.Info) -> list[gql_type]:  # noqa: ANN001
+        async def get_all(self: Self, info: strawberry.Info) -> list[gql_type]:
             items = await repo.get_all()
+            print(items)
             return [gql_type.from_pydantic(i) for i in items]
 
-        # 2. Dynamic Method: Get Single (By ID or Unique Key)
         async def get_one(
-            self,  # noqa: ANN001
-            info: strawberry.Info,  # noqa: ANN001
-            id: UUID | None = None,  # noqa: ANN001, ANN003
-            **kwargs,  # noqa: ANN001, ANN003
+            self: Self,
+            info: strawberry.Info,
+            id: UUID | None = None,
+            **kwargs: None,
         ) -> gql_type | None:
             search_params = {"id": str(id)} if id else kwargs
             item = await repo.find_unique_or_any(**search_params)
             return gql_type.from_pydantic(item) if item else None
 
-        # ฉีด method เข้าไปใน class พร้อมกำหนดชื่อแบบ dynamic
-        setattr(cls, f"get_{model_name}s", strawberry.field(get_all))
-        setattr(cls, f"get_{model_name}", strawberry.field(get_one))
+        async def create_item(
+            self: Self,
+            info: strawberry.Info,
+            data: input_fields if input_fields else strawberry.scalars.JSON,
+        ) -> gql_type:  # noqa: E501
+            # 1. เช็คว่ามี data ส่งมาจริงไหม
+            if data is None:
+                raise Exception("Input data is missing in Variables")
+            # 2. สั่งสร้างข้อมูล (ตรวจสอบว่า repo คือ prisma.user หรือไม่)
+            item = await repo.create(data=data)
 
-        # คืนค่า class ที่ถูกฉีด field แล้วและหุ้มด้วย @strawberry.type
+            # 3. เช็คว่าสร้างสำเร็จไหม ก่อนจะไป .from_pydantic
+            if item is None:
+                raise Exception("Failed to create item in database")
+
+            return gql_type.from_pydantic(item)
+
+        async def update_item(
+            self: Self,
+            info: strawberry.Info,
+            id: UUID,
+            data: strawberry.scalars.JSON,
+        ) -> gql_type:
+            item = await repo.update(str(id), data)
+            return gql_type.from_pydantic(item)
+
+        async def delete_item(self: Self, info: strawberry.Info, id: UUID) -> bool:
+            return await repo.delete(str(id))
+
+        async def create_many(
+            self: Self, info: strawberry.Info, data: list[strawberry.scalars.JSON]
+        ) -> list[gql_type]:
+
+            items = await repo.create_many(data)
+            return [gql_type.from_pydantic(i) for i in items]
+
+        async def update_many(
+            self: Self, info: strawberry.Info, data: list[strawberry.scalars.JSON]
+        ) -> list[gql_type]:
+
+            items = await repo.update_many(data)
+            return [gql_type.from_pydantic(i) for i in items]
+
+        async def delete_many(
+            self: Self, info: strawberry.Info, ids: list[UUID]
+        ) -> int:
+
+            str_ids = [str(id) for id in ids]
+            count = await repo.delete_many(str_ids)
+            return count
+
+        func_name = f"create_{name}_func"
+        setattr(current_module, func_name, create_item)
+        if mode == "query":
+            setattr(cls, f"get_{name}s", strawberry.field(get_all))
+            setattr(cls, f"get_{name}", strawberry.field(get_one))
+
+        elif mode == "mutation":
+            setattr(cls, f"create_{name}", strawberry.mutation(create_item))
+            setattr(cls, f"update_{name}", strawberry.mutation(update_item))
+            setattr(cls, f"delete_{name}", strawberry.mutation(delete_item))
+            setattr(cls, f"create_{name}s", strawberry.mutation(create_many))
+            setattr(cls, f"update_{name}s", strawberry.mutation(update_many))
+            setattr(cls, f"delete_{name}s", strawberry.mutation(delete_many))
         return strawberry.type(cls)
 
     return wrapper

@@ -12,6 +12,7 @@ line-length = 88
 select = ["E", "F", "I", "B", "ANN", "UP"]
 exclude = ["src/prisma"]
 
+
 [tool.ruff.lint.isort]
 lines-between-types = 1
 combine-as-imports = true

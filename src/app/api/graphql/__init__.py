@@ -2,23 +2,22 @@ import strawberry
 
 from strawberry.fastapi import GraphQLRouter
 
-# Accounts
-from app.api.graphql.accounts.queries import AccountsQuery
+from app.api.graphql.registry import MutationRegistry, QueryRegistry
 from app.api.graphql.security import get_context
 
-# Users
-from app.api.graphql.users.mutations import UsersMutation
-from app.api.graphql.users.queries import UsersQuery
+
+@strawberry.type
+class Query(QueryRegistry):
+    @strawberry.field
+    def health(self) -> str:
+        return "ok"
 
 
 @strawberry.type
-class Query(UsersQuery, AccountsQuery):
-    pass
-
-
-@strawberry.type
-class Mutation(UsersMutation):
-    pass
+class Mutation(MutationRegistry):
+    @strawberry.field
+    def ping(self) -> str:
+        return "pong"
 
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)

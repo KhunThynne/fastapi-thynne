@@ -15,7 +15,6 @@ model User {
   email     String   @unique
   role      RoleEnum @default(USER)
   accounts  Account[] 
-  @@map("users")
 }
 
 model Account {
@@ -28,7 +27,6 @@ model Account {
   user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@map("accounts")
 }
 
 enum RoleEnum {

@@ -5,6 +5,6 @@ from modules.account.repository import AccountRepository
 account_repo = AccountRepository()
 
 
-@strawberry_crud(mode="query", gql_type=AccountType, repo=account_repo)
-class AccountsQuery:
+@strawberry_crud(mode="mutation", gql_type=AccountType, repo=account_repo)
+class AccountsMutation:
     pass

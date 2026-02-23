@@ -1,28 +1,10 @@
-from uuid import UUID
+from app.api.graphql.factory import strawberry_crud
+from modules.user.model import UserType
+from modules.user.repository import UserRepository
 
-import strawberry
-
-from core.db import prisma
-from models.user import UsersType
+user_repo = UserRepository()
 
 
-@strawberry.type
-class UsersQuery:
-    @strawberry.field
-    async def get_users(self, info: strawberry.Info) -> list[UsersType]:
-        users_db = await prisma.user.find_many(take=100)
-        return [UsersType.from_pydantic(u) for u in users_db]
-
-    @strawberry.field
-    async def get_user(
-        self, info: strawberry.Info, id: UUID | None = None, username: str | None = None
-    ) -> UsersType | None:
-        user = None
-        if id is not None:
-            user = await prisma.user.find_unique(where={"id": str(id)})
-        elif username is not None:
-            user = await prisma.user.find_unique(where={"username": username})
-
-        if user:
-            return UsersType.from_pydantic(user)
-        return None
+@strawberry_crud(mode="query", gql_type=UserType, repo=user_repo)
+class UserQuery:
+    pass

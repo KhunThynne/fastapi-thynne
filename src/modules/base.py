@@ -1,4 +1,4 @@
-from typing import Any, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar
 
 from core.db import prisma
 
@@ -23,3 +23,10 @@ class BaseRepository(Generic[T]):
 
     async def delete(self, id: str) -> T | None:
         return await self.model.delete(where={"id": id})
+
+
+class StrawberryPydanticBase:
+    if TYPE_CHECKING:
+
+        @classmethod
+        def from_pydantic(cls, model_instance: Any) -> Self: ...  # noqa: ANN401

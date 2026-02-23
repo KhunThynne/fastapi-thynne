@@ -2,12 +2,11 @@ from typing import TYPE_CHECKING, Annotated
 
 import strawberry
 
+from modules.base import StrawberryPydanticBase
 from prisma.models import Account
 
-from .shared import StrawberryPydanticBase
-
 if TYPE_CHECKING:
-    from .user import UsersType
+    from modules.user.model import UserType
 
 
 @strawberry.experimental.pydantic.type(
@@ -15,4 +14,6 @@ if TYPE_CHECKING:
     fields=["id", "userId", "type", "provider", "providerAccountId"],
 )
 class AccountType(StrawberryPydanticBase):
-    user: list[Annotated["UsersType", strawberry.lazy("models.user")]]
+    user: list[Annotated["UserType", strawberry.lazy("modules.user.model")]] | None = (
+        None
+    )
