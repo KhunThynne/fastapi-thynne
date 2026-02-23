@@ -3,7 +3,7 @@ uvicorn[standard]==0.23.2
 pydantic
 pydantic_settings
 discord.py
-prisma
+prisma==0.15.0
 discord.py
 python-dotenv==1.0.1
 psycopg2-binary==2.9.9

@@ -1,6 +1,6 @@
 generator client {
   provider             = "prisma-client-py"
-  output               = "../src/prisma" 
+  // output               = "../src/prisma" 
   recursive_type_depth = 5
 }
 
