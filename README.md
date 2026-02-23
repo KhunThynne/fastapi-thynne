@@ -28,7 +28,7 @@ cd fastapi-thynne
 ```bash
 # Create a virtual environment
 python -m venv venv
-
+pip install -r requirements.txt
 # Activate the virtual environment
 # Windows (Command Prompt)
 venv\Scripts\activate.bat

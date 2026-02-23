@@ -1,0 +1,58 @@
+// generator client_js {
+//   provider = "prisma-client-js"
+// }
+
+generator client_py {
+  provider             = "prisma-client-py"
+  output               = "../backend/fastapi_heppost/src/generated/prisma"
+  engineType           = "binary"
+  recursive_type_depth = 5
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model alembic_version {
+  version_num String @id(map: "alembic_version_pkc") @db.VarChar(32)
+}
+
+model license {
+  key          String    @db.VarChar
+  product_id   String    @db.Uuid
+  owner_id     String?   @db.Uuid
+  activated_at DateTime? @db.Timestamp(6)
+  expired_at   DateTime? @db.Timestamp(6)
+  id           String    @db.Uuid
+  users        users?    @relation(fields: [owner_id], references: [id])
+  products     products  @relation(fields: [product_id], references: [id])
+
+  @@id([key, id])
+}
+
+model products {
+  type          productstypeenum
+  duration_days Int
+  id            String           @id @db.Uuid
+  name          String           @db.VarChar
+  licenses      license[]
+
+  @@index([id], map: "ix_products_id")
+  @@index([name], map: "ix_products_name")
+}
+
+model users {
+  username String    @unique(map: "ix_users_username") @db.VarChar
+  email    String    @unique(map: "ix_users_email") @db.VarChar
+  id       String    @id @db.Uuid
+  licenses license[]
+
+  @@index([id], map: "ix_users_id")
+}
+
+enum productstypeenum {
+  PRO
+  LITE
+  FREE
+}
