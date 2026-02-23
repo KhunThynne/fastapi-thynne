@@ -1,9 +1,9 @@
-from prisma.models import license
+from prisma.models import product
 
 from modules.base import BaseRepository
 
 
-class LicenseRepository(BaseRepository[license]):
+class ProductRepository(BaseRepository[product]):
     def __init__(self) -> None:
         super().__init__("license")
 

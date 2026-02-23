@@ -10,7 +10,7 @@ line-length = 88
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "B", "ANN", "UP"]
-exclude = ["src/prisma"]
+exclude = ["src/generated/prisma"]
 
 
 [tool.ruff.lint.isort]
@@ -22,7 +22,7 @@ quote-style = "double"
 indent-style = "space"
 
 [tool.ruff.lint.per-file-ignores]
-"src/prisma/*" = ["ALL"]
+"src/generated/prisma/*" = ["ALL"]
 
 [tool.mypy]
 mypy_path = "src"
@@ -30,7 +30,7 @@ explicit_package_bases = true
 namespace_packages = true
 
 exclude = [
-    '^src/prisma/',
+    '^src/generated/prisma/',
 ]
 
 ignore_missing_imports = true
@@ -42,9 +42,9 @@ tag = true
 tag_name = "v{new_version}"
 
 [tool.prisma]
-schema = "../../prisma/schema.prisma"
+schema = "../../generated/prisma/schema.prisma"
 
 [[tool.mypy.overrides]]
-module = "prisma.*"
+module = "generated.prisma.*"
 ignore_errors = true
 follow_imports = "silent"

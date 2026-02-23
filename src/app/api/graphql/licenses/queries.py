@@ -7,7 +7,7 @@ from modules.license.model import LicenseType
 
 
 @strawberry.type
-class LicensesQuery:
+class LicenseQuery:
     @strawberry.field
     async def get_licenses(self) -> list[LicenseType]:
         license = await prisma.license.find_many(take=100)
