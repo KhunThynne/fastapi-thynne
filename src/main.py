@@ -1,24 +1,24 @@
+import sys
+
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
-
-import uvicorn
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from typeguard import typechecked
 
+import env
+
 from app.api import api_router
-from env import _env
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    print("FastAPI is starting up...")
     try:
         from core.db import init_db
 
         await init_db()
-        print("Database connected and tables created successfully.")
+
     except Exception as e:
         print(f"⚠️ Warning: Could not connect to database: {e}")
 
@@ -33,7 +33,7 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         print(f"⚠️ Warning: Error while disconnecting database: {e}")
 
 
-app = FastAPI(title=_env.APP_NAME, lifespan=lifespan)
+app = FastAPI(title=env._env.APP_NAME, lifespan=lifespan)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -51,9 +51,16 @@ def root() -> dict[str, str]:
 
 
 if __name__ == "__main__":
+    if not env._env.RUNNING_FROM_BAT:
+        print("\033[91m\033[1m!" * 50)
+        print("\n 🚨 ERROR: Please run via .run.bat only! or read more in README.md \n")
+        print("!" * 50 + "\n")
+        sys.exit(1)
+    import uvicorn
+
     uvicorn.run(
         "main:app",
-        host=_env.HOST,
-        port=_env.PORT,
-        reload=_env.DEBUG,
+        host=env._env.HOST,
+        port=env._env.PORT,
+        reload=env._env.DEBUG,
     )

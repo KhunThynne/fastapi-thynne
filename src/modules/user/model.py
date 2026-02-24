@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Annotated
 
 import strawberry
 
-from prisma.models import user
+from prisma.models import User
 
 from modules.base import StrawberryPydanticBase
 
@@ -11,7 +11,7 @@ if TYPE_CHECKING:
 
 
 @strawberry.experimental.pydantic.type(
-    model=user,
+    model=User,
     fields=["id", "username", "email"],
 )
 class UserType(StrawberryPydanticBase):

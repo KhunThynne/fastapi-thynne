@@ -1,12 +1,10 @@
-import uuid
-
 from datetime import UTC, datetime
 from uuid import UUID
 
 import strawberry
 
-from core.db import prisma
-from modules.license.model import LicenseType
+from core.db import prisma_client
+from modules.license.model import LicenseCreateInputType, LicenseType
 from utils.license import generate_product_key
 
 
@@ -15,25 +13,37 @@ class LicenseMutation:
     @strawberry.mutation
     async def create_license(
         self,
-        product_id: UUID,
-        key: str | None = None,
+        data: LicenseCreateInputType,
     ) -> LicenseType:
-        final_key = key if key else generate_product_key()
-        new_id = str(uuid.uuid4())
-
-        new_license = await prisma.license.create(
-            data={"id": new_id, "key": final_key, "product_id": str(product_id)}
+        final_key = data.key or generate_product_key()
+        if len(final_key) != 36:
+            raise Exception(
+                f"License key must be exactly 36 characters form {len(final_key)}"
+            )
+        new_license = await prisma_client.license.create(
+            data={
+                "key": final_key,
+                "product_id": str(data.product_id),
+                "activated_at": datetime.now(UTC),
+            }
         )
         return LicenseType.from_pydantic(new_license)
 
     @strawberry.mutation
     async def delete_license(self, id: UUID) -> bool:
-        deleted = await prisma.license.delete_many(where={"id": str(id)})
+        deleted = await prisma_client.license.delete_many(where={"id": str(id)})
         return deleted > 0
 
     @strawberry.mutation
     async def revoke_license(self, key: str) -> bool:
-        updated = await prisma.license.update_many(
+        updated = await prisma_client.license.update_many(
             where={"key": key}, data={"expired_at": datetime.now(UTC)}
         )
         return updated > 0
+
+    @strawberry.mutation
+    async def update_license(
+        self, id: UUID, data: strawberry.scalars.JSON
+    ) -> LicenseType:
+        updated = await prisma_client.license.update(where={"id": id}, data=data)
+        return LicenseType.from_pydantic(updated)

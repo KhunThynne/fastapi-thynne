@@ -9,7 +9,8 @@ python-dotenv==1.0.1
 psycopg2-binary==2.9.9
 types-requests
 # GraphQL (Added)
-strawberry-graphql[fastapi]
+strawberry-graphql[fastapi,pydantic]
+
 omise
 
 # Linters / type checker / formatter

@@ -15,7 +15,7 @@ class Query(QueryRegistry):
 
 @strawberry.type
 class Mutation(MutationRegistry):
-    @strawberry.field
+    @strawberry.mutation
     def ping(self) -> str:
         return "pong"
 

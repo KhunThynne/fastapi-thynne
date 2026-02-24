@@ -2,7 +2,7 @@ from typing import TYPE_CHECKING, Annotated
 
 import strawberry
 
-from prisma.models import product
+from prisma.models import Product
 
 from modules.base import StrawberryPydanticBase
 
@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 
 @strawberry.experimental.pydantic.type(
-    model=product,
-    fields=["id", "type", "name", "duration_days"],
+    model=Product,
+    fields=["id", "type", "name"],
 )
 class ProductType(StrawberryPydanticBase):
     licenses: (

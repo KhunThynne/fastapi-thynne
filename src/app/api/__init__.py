@@ -4,8 +4,11 @@
 from fastapi import APIRouter
 
 from app.api.graphql import graphql_app
+from app.api.test import router as test_router
 
 api_router = APIRouter(prefix="/api")
+api_router.include_router(test_router)
 api_router.include_router(graphql_app, prefix="/graphql")
+
 # api_router.include_router(omise_router)
 # api_router.include_router(discord_router)

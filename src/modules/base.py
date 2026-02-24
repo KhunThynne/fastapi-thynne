@@ -1,13 +1,13 @@
 from typing import TYPE_CHECKING, Any, Generic, Self, TypeVar
 
-from core.db import prisma
+from core.db import prisma_client
 
 T = TypeVar("T")
 
 
 class BaseRepository(Generic[T]):
     def __init__(self, model_name: str) -> None:
-        self.model = getattr(prisma, model_name)
+        self.model = getattr(prisma_client, model_name)
 
     async def get_all(self) -> list[T]:
         return await self.model.find_many()
