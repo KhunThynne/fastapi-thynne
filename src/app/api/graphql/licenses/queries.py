@@ -40,6 +40,6 @@ class LicenseQuery:
         license_obj = await prisma_client.license.find_first(where={"key": key})
         if not license_obj:
             raise Exception("INVALID_LICENSE: The provided key does not exist.")
-        if license_obj.expired_at < datetime.now(UTC):
+        if license_obj.expired_at and license_obj.expired_at < datetime.now(UTC):
             raise Exception("INVALID_LICENSE: The provided key is expired.")
         return LicenseType.from_pydantic(license_obj)

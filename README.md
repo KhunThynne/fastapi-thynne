@@ -30,12 +30,15 @@ cd fastapi-thynne
 python -m venv venv
 pip install -r requirements.txt
 # Activate the virtual environment
+
+
+
 # Windows (Command Prompt)
 venv\Scripts\activate.bat
 # Windows (PowerShell)
 venv\Scripts\Activate.ps1
-# Mac/Linux
-source venv/bin/activate
+# Mac/Linux/Git bash
+source venv/Scripts/activate
 ```
 
 ### 3. Install dependencies
