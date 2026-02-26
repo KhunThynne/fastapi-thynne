@@ -45,5 +45,19 @@ class LicenseMutation:
     async def update_license(
         self, id: UUID, data: strawberry.scalars.JSON
     ) -> LicenseType:
-        updated = await prisma_client.license.update(where={"id": id}, data=data)
+
+        update_data = {
+            k: v for k, v in strawberry.asdict(data).items() if v is not None
+        }
+
+        if "product_id" in update_data:
+            update_data["product_id"] = str(update_data["product_id"])
+        if "user_id" in update_data:
+            update_data["user_id"] = str(update_data["user_id"])
+
+        updated = await prisma_client.license.update(
+            where={"id": str(id)},
+            data=update_data,  # type: ignore
+        )
+
         return LicenseType.from_pydantic(updated)
