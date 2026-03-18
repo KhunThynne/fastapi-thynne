@@ -9,17 +9,19 @@ if TYPE_CHECKING:
     from modules.account.model import AccountType
 
 
-@strawberry.experimental.pydantic.input(
-    model=User, fields=["username", "email", "role"]
-)
+@strawberry.experimental.pydantic.input(model=User)
 class UserCreateInput(StrawberryPydanticBase):
-    pass
+    username: strawberry.auto
+    email: strawberry.auto
+    role: strawberry.auto
 
 
-@strawberry.experimental.pydantic.type(
-    model=User, fields=["id", "username", "email", "role"]
-)
+@strawberry.experimental.pydantic.type(model=User)
 class UserType(StrawberryPydanticBase):
+    id: strawberry.auto
+    username: strawberry.auto
+    email: strawberry.auto
+    role: strawberry.auto
     accounts: (
         list[Annotated["AccountType", strawberry.lazy("modules.account.model")]] | None
     ) = None

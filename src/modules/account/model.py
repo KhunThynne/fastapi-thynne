@@ -11,9 +11,11 @@ if TYPE_CHECKING:
 
 @strawberry.experimental.pydantic.type(
     model=Account,
-    fields=["id", "userId", "type", "provider", "providerAccountId"],
 )
 class AccountType(StrawberryPydanticBase):
-    user: list[Annotated["UserType", strawberry.lazy("modules.user.model")]] | None = (
-        None
-    )
+    id: strawberry.auto
+    userId: strawberry.auto
+    type: strawberry.auto
+    provider: strawberry.auto
+    providerAccountId: strawberry.auto
+    user: Annotated["UserType", strawberry.lazy("modules.user.model")] | None = None
