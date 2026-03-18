@@ -17,15 +17,16 @@ LicenseKeyArg = Annotated[
 ]
 
 
-@strawberry.experimental.pydantic.type(
-    model=License,
-    fields=["id", "key", "user_id", "product_id", "activated_at", "expired_at"],
-)
+@strawberry.experimental.pydantic.type(model=License)
 class LicenseType(StrawberryPydanticBase):
-    user: list[Annotated["UserType", strawberry.lazy("modules.user.model")]] | None
-    product: (
-        list[Annotated["ProductType", strawberry.lazy("modules.product.model")]] | None
-    )
+    id: strawberry.auto
+    key: strawberry.auto
+    user_id: strawberry.auto
+    product_id: strawberry.auto
+    activated_at: strawberry.auto
+    expired_at: strawberry.auto
+    user: Annotated["UserType", strawberry.lazy("modules.user.model")] | None
+    product: Annotated["ProductType", strawberry.lazy("modules.product.model")] | None
 
 
 @strawberry.input

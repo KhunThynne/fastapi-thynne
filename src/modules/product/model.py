@@ -10,11 +10,9 @@ if TYPE_CHECKING:
     from modules.license.model import LicenseType
 
 
-@strawberry.experimental.pydantic.type(
-    model=Product,
-    fields=["id", "type", "name"],
-)
+@strawberry.experimental.pydantic.type(model=Product)
 class ProductType(StrawberryPydanticBase):
-    licenses: (
-        list[Annotated["LicenseType", strawberry.lazy("modules.license.model")]] | None
-    )
+    id: strawberry.auto
+    type: strawberry.auto
+    name: strawberry.auto
+    licenses: Annotated["LicenseType", strawberry.lazy("modules.license.model")] | None

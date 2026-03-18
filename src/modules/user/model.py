@@ -12,9 +12,9 @@ if TYPE_CHECKING:
 
 @strawberry.experimental.pydantic.type(
     model=User,
-    fields=["id", "username", "email"],
 )
 class UserType(StrawberryPydanticBase):
-    licenses: (
-        list[Annotated["LicenseType", strawberry.lazy("modules.license.model")]] | None
-    )
+    id: strawberry.auto
+    username: strawberry.auto
+    email: strawberry.auto
+    licenses: Annotated["LicenseType", strawberry.lazy("modules.license.model")] | None

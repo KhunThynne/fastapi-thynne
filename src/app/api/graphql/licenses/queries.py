@@ -27,9 +27,11 @@ class LicenseQuery:
         take: int | None = 100,
         skip: int | None = 0,
     ) -> list[LicenseType]:
-        where = cast(LicenseWhereInput, where)
+        prisma_where = (
+            cast(LicenseWhereInput, strawberry.asdict(where)) if where else {}
+        )
         license = await prisma_client.license.find_many(
-            where=where or {},
+            where=prisma_where,
             take=take,
             skip=skip,
         )
