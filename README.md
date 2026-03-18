@@ -1,4 +1,5 @@
 # FastApi-Thynne 🚀
+
 Version: 0.1.1
 FastAPI backend project for Thynne, incorporating API, GraphQL, and various services.
 
@@ -47,6 +48,7 @@ pip install -r requirements.txt
 ```
 
 ### 4. Run the application
+
 create .env and add DATABASE_URL="postgresql://postgres:postgres@localhost:5432/postgres" <- your database url
 You can use the provided batch script or run it manually.
 
@@ -54,6 +56,7 @@ You can use the provided batch script or run it manually.
 bump-my-version bump major --commit --tag
 bump-my-version bump minor --commit --tag
 bump-my-version bump patch --commit --tag
+
 ```cmd
 run.bat
 ```
@@ -62,9 +65,11 @@ run.bat
 alembic init migrations
 
 # สั่งให้ Alembic ตรวจความต่างและสร้างไฟล์แก้ DB
+
 alembic revision --autogenerate -m "added unique to license key"
 
 # สั่งให้แก้ DB จริงๆ
+
 alembic upgrade head
 
 ```bash
